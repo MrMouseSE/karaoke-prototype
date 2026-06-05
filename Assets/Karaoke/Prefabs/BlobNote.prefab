@@ -127,3 +127,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Karaoke.Tap.BlobNote
   timeMs: 0
   lane: 0
+  Distance: 10

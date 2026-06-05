@@ -9,6 +9,8 @@ namespace Karaoke.Tap
         [HideInInspector] public float timeMs;
         [HideInInspector] public int lane;
 
+        public float Distance;
+
         // Timing windows in milliseconds
         public static float PerfectWindowMs = 60f;
         public static float GoodWindowMs = 120f;
@@ -35,7 +37,7 @@ namespace Karaoke.Tap
             float t = elapsed / _travelDurationSec;
 
             // Move from top (1) to bottom (0) in normalized Y on the lane
-            float normalizedY = Mathf.Clamp01(1f - t);
+            float normalizedY = Mathf.Clamp01(1f - t) * Distance;
             SetNormalizedPosition(normalizedY);
 
             // Auto-miss if blob passes the hit zone without a tap
