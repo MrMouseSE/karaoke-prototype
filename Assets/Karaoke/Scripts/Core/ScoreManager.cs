@@ -9,8 +9,7 @@ namespace Karaoke.Core
         public static ScoreManager Instance { get; private set; }
 
         [Header("Score Values")]
-        [SerializeField] private int perfectScore = 300;
-        [SerializeField] private int goodScore = 100;
+        [SerializeField] private int hitScore = 300;
         [SerializeField] private int streakBonusEvery = 10;
         [SerializeField] private int streakBonusAmount = 500;
 
@@ -18,12 +17,10 @@ namespace Karaoke.Core
         public int Streak { get; private set; }
         public int MaxStreak { get; private set; }
         public int TotalNotes { get; private set; }
-        public int HitNotes { get; private set; }
-        public int PerfectCount { get; private set; }
-        public int GoodCount { get; private set; }
+        public int HitCount { get; private set; }
         public int MissCount { get; private set; }
 
-        public float Accuracy => TotalNotes == 0 ? 0f : (float)HitNotes / TotalNotes;
+        public float Accuracy => TotalNotes == 0 ? 0f : (float)HitCount / TotalNotes;
 
         public string Grade
         {
@@ -38,8 +35,8 @@ namespace Karaoke.Core
             }
         }
 
-        public event Action<int, int> OnScoreChanged;    // score, streak
-        public event Action<HitResult> OnNoteJudged;
+        public event Action<int, int> OnScoreChanged;  // score, streak
+        public event Action<bool> OnNoteJudged;         // isHit
 
         private HitJudge _hitJudge;
         private SongPlayer _songPlayer;
@@ -55,74 +52,44 @@ namespace Karaoke.Core
             _songPlayer = SongPlayer.Instance;
             _hitJudge = HitJudge.Instance;
 
-            if (_songPlayer != null)
-                _songPlayer.OnSongStarted += ResetStats;
-
-            if (_hitJudge != null)
-                _hitJudge.OnJudgement += OnJudgement;
-            else
-                Debug.LogError("[ScoreManager] HitJudge instance not found.");
+            if (_songPlayer != null) _songPlayer.OnSongStarted += ResetStats;
+            if (_hitJudge != null)   _hitJudge.OnJudgement += OnJudgement;
+            else Debug.LogError("[ScoreManager] HitJudge not found.");
         }
 
         private void OnDestroy()
         {
             if (_songPlayer != null) _songPlayer.OnSongStarted -= ResetStats;
-            if (_hitJudge != null) _hitJudge.OnJudgement -= OnJudgement;
+            if (_hitJudge != null)   _hitJudge.OnJudgement -= OnJudgement;
         }
 
         private void ResetStats()
         {
-            Score = 0;
-            Streak = 0;
-            MaxStreak = 0;
-            TotalNotes = 0;
-            HitNotes = 0;
-            PerfectCount = 0;
-            GoodCount = 0;
-            MissCount = 0;
+            Score = 0; Streak = 0; MaxStreak = 0;
+            TotalNotes = 0; HitCount = 0; MissCount = 0;
             OnScoreChanged?.Invoke(Score, Streak);
         }
 
-        private void OnJudgement(HitResult result, int lane)
+        private void OnJudgement(bool isHit, int lane)
         {
             TotalNotes++;
-            OnNoteJudged?.Invoke(result);
+            OnNoteJudged?.Invoke(isHit);
 
-            switch (result)
+            if (isHit)
             {
-                case HitResult.Perfect:
-                    PerfectCount++;
-                    HitNotes++;
-                    AddScore(perfectScore);
-                    IncreaseStreak();
-                    break;
-                case HitResult.Good:
-                    GoodCount++;
-                    HitNotes++;
-                    AddScore(goodScore);
-                    IncreaseStreak();
-                    break;
-                case HitResult.Miss:
-                    MissCount++;
-                    Streak = 0;
-                    OnScoreChanged?.Invoke(Score, Streak);
-                    break;
+                HitCount++;
+                Score += hitScore;
+                Streak++;
+                if (Streak > MaxStreak) MaxStreak = Streak;
+                if (Streak % streakBonusEvery == 0) Score += streakBonusAmount;
             }
-        }
+            else
+            {
+                MissCount++;
+                Streak = 0;
+            }
 
-        private void AddScore(int amount)
-        {
-            Score += amount;
             OnScoreChanged?.Invoke(Score, Streak);
-        }
-
-        private void IncreaseStreak()
-        {
-            Streak++;
-            if (Streak > MaxStreak) MaxStreak = Streak;
-
-            if (Streak % streakBonusEvery == 0)
-                AddScore(streakBonusAmount);
         }
     }
 }

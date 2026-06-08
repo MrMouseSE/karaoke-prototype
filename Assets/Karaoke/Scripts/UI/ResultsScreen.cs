@@ -43,21 +43,7 @@ namespace Karaoke.UI
                 _songPlayer.OnSongFinished -= OnSongFinished;
         }
 
-        private void OnSongFinished()
-        {
-            var sm = ScoreManager.Instance;
-            if (sm == null) return;
-
-            if (gradeText != null) gradeText.text = sm.Grade;
-            if (scoreText != null) scoreText.text = sm.Score.ToString("N0");
-            if (accuracyText != null) accuracyText.text = $"{sm.Accuracy * 100f:F1}%";
-            if (perfectText != null) perfectText.text = sm.PerfectCount.ToString();
-            if (goodText != null) goodText.text = sm.GoodCount.ToString();
-            if (missText != null) missText.text = sm.MissCount.ToString();
-            if (maxStreakText != null) maxStreakText.text = sm.MaxStreak.ToString();
-
-            if (panel != null) panel.SetActive(true);
-        }
+private void OnSongFinished() { var sm = ScoreManager.Instance; if (sm == null) return; if (gradeText != null) gradeText.text = sm.Grade; if (scoreText != null) scoreText.text = sm.Score.ToString("N0"); if (accuracyText != null) accuracyText.text = $"{sm.Accuracy * 100f:F1}%"; if (perfectText != null) perfectText.text = sm.HitCount.ToString(); if (goodText != null) goodText.text = "-"; if (missText != null) missText.text = sm.MissCount.ToString(); if (maxStreakText != null) maxStreakText.text = sm.MaxStreak.ToString(); if (panel != null) panel.SetActive(true); }
 
         private void OnRetry()
         {

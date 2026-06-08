@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 650a2c66f1cd15648b1fb38260184f28, type: 3}
+  m_Name: SongEditorSettings
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::Karaoke.Editor.SongEditorSettings
+  defaultSpeed: 5
+  defaultWindowMs: 350
+  snapMs: 100
+  pitchRows:
+  - label: A4
+    clip: {fileID: 8300000, guid: e7aec9836beb09846a7d8916ec0c31b6, type: 3}
+    lane: 3
+  - label: G4
+    clip: {fileID: 8300000, guid: 3e47570d849f7014ea6e3d1a6a7691bd, type: 3}
+    lane: 2
+  - label: E4
+    clip: {fileID: 8300000, guid: 70c2f4a0dccdfbd429f0b2cc1cee3500, type: 3}
+    lane: 1
+  - label: D4
+    clip: {fileID: 8300000, guid: 2c0c985d1a249094f857473d02be28f5, type: 3}
+    lane: 1
+  - label: C4
+    clip: {fileID: 8300000, guid: 70b8268dd2f44524dbcca2acdfaf641d, type: 3}
+    lane: 0
+  - label: B3
+    clip: {fileID: 8300000, guid: d424d8c5be4d51b4e9b74d91c7edf847, type: 3}
+    lane: 0
