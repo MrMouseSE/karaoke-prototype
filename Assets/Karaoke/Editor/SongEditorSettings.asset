@@ -12,25 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 650a2c66f1cd15648b1fb38260184f28, type: 3}
   m_Name: SongEditorSettings
   m_EditorClassIdentifier: Assembly-CSharp-Editor::Karaoke.Editor.SongEditorSettings
+  baseClips:
+  - noteName: C
+    midiNote: 36
+    clip: {fileID: 8300000, guid: 063db2403aa84ff4d8bf1bec788b0ea5, type: 3}
+  - noteName: D
+    midiNote: 38
+    clip: {fileID: 8300000, guid: 4132d01ab2d86064caa6ad6fca26b7b9, type: 3}
+  - noteName: E
+    midiNote: 40
+    clip: {fileID: 8300000, guid: e4ef5c7e08f03374e8a7cee4f6a0c4be, type: 3}
+  - noteName: F
+    midiNote: 41
+    clip: {fileID: 8300000, guid: fccf0c60734f24b4cb2e35762bd7e784, type: 3}
+  - noteName: G
+    midiNote: 43
+    clip: {fileID: 8300000, guid: 1a0ad8ad665104b4d89a047abb7d2f4d, type: 3}
+  - noteName: A
+    midiNote: 45
+    clip: {fileID: 8300000, guid: b417707491cd77447992c42872162012, type: 3}
+  - noteName: B
+    midiNote: 47
+    clip: {fileID: 8300000, guid: 844822ae4edbaae479cb45612818ba0e, type: 3}
+  minOctave: 2
+  maxOctave: 5
   defaultSpeed: 5
   defaultWindowMs: 350
+  defaultNoteDurationSec: 0.4
+  defaultFadeSec: 0.15
   snapMs: 100
-  pitchRows:
-  - label: A4
-    clip: {fileID: 8300000, guid: e7aec9836beb09846a7d8916ec0c31b6, type: 3}
-    lane: 3
-  - label: G4
-    clip: {fileID: 8300000, guid: 3e47570d849f7014ea6e3d1a6a7691bd, type: 3}
-    lane: 2
-  - label: E4
-    clip: {fileID: 8300000, guid: 70c2f4a0dccdfbd429f0b2cc1cee3500, type: 3}
-    lane: 1
-  - label: D4
-    clip: {fileID: 8300000, guid: 2c0c985d1a249094f857473d02be28f5, type: 3}
-    lane: 1
-  - label: C4
-    clip: {fileID: 8300000, guid: 70b8268dd2f44524dbcca2acdfaf641d, type: 3}
-    lane: 0
-  - label: B3
-    clip: {fileID: 8300000, guid: d424d8c5be4d51b4e9b74d91c7edf847, type: 3}
-    lane: 0
+  rowHeight: 16

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Karaoke.Data;
 
@@ -8,76 +9,86 @@ namespace Karaoke.Tap
 
     public class BlobNote : MonoBehaviour
     {
-        // Событие: (clip) — кидается при тапе, NoteSpawner слушает
-        public static event Action<AudioClip> OnNoteHit;
+        /// <summary>clip, pitch, durationSec, fadeSec</summary>
+        public static event Action<AudioClip, float, float, float> OnNoteHit;
 
-        // Данные текущей ноты
-        public NoteData NoteData { get; private set; }
-        public BlobPhase Phase { get; private set; }
+        public NoteData  NoteData { get; private set; }
+        public BlobPhase Phase    { get; private set; }
 
         private Transform _hitZone;
-        private float _arrivalTime;      // Time.time когда блоб должен прибыть
-        private float _waitUntil;        // Time.time до которого блоб ждёт тапа
-        private bool _initialized;
+        private float     _arrivalTime;
+        private float     _waitUntil;
+        private bool      _initialized;
 
-        // Анимация исчезновения
-        
-        private MeshRenderer _renderer;
-        private static readonly int ColorProp = Shader.PropertyToID("_Color");
+        private MeshRenderer  _renderer;
         private MaterialPropertyBlock _mpb;
-private bool _dying;
-        private float _dieTimer;
-        private const float DieDuration = 0.15f;
+        private static readonly int ColorProp = Shader.PropertyToID("_Color");
+
+        private bool    _dying;
         private Vector3 _originalScale;
 
         public void Init(NoteData data, Transform hitZone, float arrivalTime)
         {
-            NoteData = data;
-            _hitZone = hitZone;
-            _arrivalTime = arrivalTime;
-            _waitUntil = arrivalTime + data.tapWindowMs / 1000f;
-            Phase = BlobPhase.Flying;
-            _dying = false;
+            NoteData      = data;
+            _hitZone      = hitZone;
+            _arrivalTime  = arrivalTime;
+            _waitUntil    = arrivalTime + data.tapWindowMs / 1000f;
+            Phase         = BlobPhase.Flying;
+            _dying        = false;
             _originalScale = transform.localScale;
+            transform.localScale = _originalScale;
+
             _renderer = GetComponent<MeshRenderer>();
             if (_mpb == null) _mpb = new MaterialPropertyBlock();
-            if (_renderer != null) { _renderer.GetPropertyBlock(_mpb); _mpb.SetColor(ColorProp, Color.white); _renderer.SetPropertyBlock(_mpb); }
-            transform.localScale = _originalScale;
+            SetColor(Color.white);
+
             _initialized = true;
         }
 
-private void Update() { if (!_initialized || _dying) return; float now = Time.time; switch (Phase) { case BlobPhase.Flying: MoveTowardHitZone(now); break; case BlobPhase.Waiting: AnimateWaiting(now); if (now >= _waitUntil) Miss(); break; } }
-
-        private void MoveTowardHitZone(float now)
+        private void Update()
         {
-            float remaining = _arrivalTime - now;
+            if (!_initialized || _dying) return;
 
+            switch (Phase)
+            {
+                case BlobPhase.Flying:
+                    MoveTowardHitZone();
+                    break;
+                case BlobPhase.Waiting:
+                    AnimateWaiting();
+                    if (Time.time >= _waitUntil) Miss();
+                    break;
+            }
+        }
+
+        private void MoveTowardHitZone()
+        {
+            float remaining = _arrivalTime - Time.time;
             if (remaining <= 0f)
             {
-                // Прибыли — защёлкиваемся в хит-зоне
                 transform.position = _hitZone.position;
                 Phase = BlobPhase.Waiting;
                 return;
             }
-
-            // Двигаемся с постоянной скоростью к хит-зоне
             transform.position = Vector3.MoveTowards(
-                transform.position,
-                _hitZone.position,
-                NoteData.speed * Time.deltaTime
-            );
+                transform.position, _hitZone.position, NoteData.speed * Time.deltaTime);
         }
 
-private void AnimateWaiting(float now) { float elapsed = now - (_waitUntil - NoteData.tapWindowMs / 1000f); float t = Mathf.Clamp01(elapsed / (NoteData.tapWindowMs / 1000f)); float scale = Mathf.Lerp(1f, 1.6f, t); transform.localScale = _originalScale * scale; if (_renderer != null) { Color c = Color.Lerp(Color.white, Color.red, t); _mpb.SetColor(ColorProp, c); _renderer.SetPropertyBlock(_mpb); } }
+        private void AnimateWaiting()
+        {
+            float windowSec = NoteData.tapWindowMs / 1000f;
+            float elapsed   = Time.time - (_waitUntil - windowSec);
+            float t         = Mathf.Clamp01(elapsed / windowSec);
+            transform.localScale = _originalScale * Mathf.Lerp(1f, 1.6f, t);
+            SetColor(Color.Lerp(Color.white, Color.red, t));
+        }
 
-
-        // Вызывается HitJudge при тапе
         public void RegisterTap()
         {
             if (Phase != BlobPhase.Waiting) return;
             Phase = BlobPhase.Done;
-            OnNoteHit?.Invoke(NoteData.clip);
-            StartDie(hit: true);
+            OnNoteHit?.Invoke(NoteData.baseClip, NoteData.Pitch, NoteData.noteDurationSec, NoteData.fadeSec);
+            StartCoroutine(DieRoutine(hit: true));
         }
 
         private void Miss()
@@ -85,34 +96,33 @@ private void AnimateWaiting(float now) { float elapsed = now - (_waitUntil - Not
             if (Phase == BlobPhase.Done) return;
             Phase = BlobPhase.Done;
             HitJudge.Instance?.RegisterMiss(this);
-            StartDie(hit: false);
+            StartCoroutine(DieRoutine(hit: false));
         }
 
-        private void StartDie(bool hit)
+        private IEnumerator DieRoutine(bool hit)
         {
             _dying = true;
-            _dieTimer = 0f;
-            if (!hit) transform.localScale = _originalScale;
-            StartCoroutine(DieRoutine(hit));
-        }
-
-        private System.Collections.IEnumerator DieRoutine(bool hit)
-        {
-            float elapsed = 0f;
+            float elapsed  = 0f;
+            float duration = 0.15f;
             Vector3 startScale = hit ? _originalScale * 1.4f : _originalScale;
+            transform.localScale = startScale;
 
-            if (hit) transform.localScale = startScale;
-
-            while (elapsed < DieDuration)
+            while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / DieDuration;
-                transform.localScale = Vector3.Lerp(startScale, Vector3.zero, t);
+                transform.localScale = Vector3.Lerp(startScale, Vector3.zero, elapsed / duration);
                 yield return null;
             }
 
             gameObject.SetActive(false);
             _initialized = false;
+        }
+
+        private void SetColor(Color c)
+        {
+            if (_renderer == null) return;
+            _mpb.SetColor(ColorProp, c);
+            _renderer.SetPropertyBlock(_mpb);
         }
     }
 }

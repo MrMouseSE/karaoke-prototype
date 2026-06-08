@@ -8,28 +8,27 @@ namespace Karaoke.Tap
     public class NoteSpawner : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private BlobNote blobPrefab;
-        [SerializeField] private Transform[] laneSpawnPoints;   // точки спауна (вверху)
-        [SerializeField] private Transform[] laneHitZones;      // хит-зоны (внизу)
-        [SerializeField] private AccompanimentPlayer accompanimentPlayer;
+        [SerializeField] private BlobNote             blobPrefab;
+        [SerializeField] private Transform[]          laneSpawnPoints;
+        [SerializeField] private Transform[]          laneHitZones;
+        [SerializeField] private AccompanimentPlayer  accompanimentPlayer;
 
         [Header("Pool")]
         [SerializeField] private int poolSizePerLane = 8;
 
-        private SongPlayer _songPlayer;
-        private NoteData[] _notes;
-        private int _nextIndex;
-
+        private SongPlayer       _songPlayer;
+        private NoteData[]       _notes;
+        private int              _nextIndex;
         private Queue<BlobNote>[] _pools;
-        private List<BlobNote> _active;
+        private List<BlobNote>   _active;
 
         private void Awake()
         {
-            int laneCount = laneSpawnPoints.Length;
-            _pools = new Queue<BlobNote>[laneCount];
+            int lanes = laneSpawnPoints.Length;
+            _pools  = new Queue<BlobNote>[lanes];
             _active = new List<BlobNote>();
 
-            for (int l = 0; l < laneCount; l++)
+            for (int l = 0; l < lanes; l++)
             {
                 _pools[l] = new Queue<BlobNote>();
                 for (int i = 0; i < poolSizePerLane; i++)
@@ -41,15 +40,8 @@ namespace Karaoke.Tap
             }
         }
 
-        private void OnEnable()
-        {
-            BlobNote.OnNoteHit += OnNoteHit;
-        }
-
-        private void OnDisable()
-        {
-            BlobNote.OnNoteHit -= OnNoteHit;
-        }
+        private void OnEnable()  => BlobNote.OnNoteHit += OnNoteHit;
+        private void OnDisable() => BlobNote.OnNoteHit -= OnNoteHit;
 
         private void Start()
         {
@@ -63,9 +55,9 @@ namespace Karaoke.Tap
         private void OnDestroy()
         {
             if (_songPlayer == null) return;
-            _songPlayer.OnSongStarted -= OnSongStarted;
+            _songPlayer.OnSongStarted  -= OnSongStarted;
             _songPlayer.OnSongFinished -= OnSongFinished;
-            _songPlayer.OnTick -= OnTick;
+            _songPlayer.OnTick         -= OnTick;
         }
 
         private void OnSongStarted()
@@ -81,20 +73,14 @@ namespace Karaoke.Tap
         {
             if (_notes == null) return;
 
-            float songTimeMs = _songPlayer.SongTimeMs;
-            float songTimeSec = songTimeMs / 1000f;
+            float songTimeSec = _songPlayer.SongTimeMs / 1000f;
 
             while (_nextIndex < _notes.Length)
             {
                 var note = _notes[_nextIndex];
                 int lane = Mathf.Clamp(note.lane, 0, laneSpawnPoints.Length - 1);
-
-                // Расстояние от спауна до хит-зоны
-                float dist = Vector3.Distance(laneSpawnPoints[lane].position, laneHitZones[lane].position);
-                // Время в пути (сек)
-                float travelSec = dist / note.speed;
-                // Момент спауна (сек от старта)
-                float spawnAtSec = note.timeMs / 1000f - travelSec;
+                float dist      = Vector3.Distance(laneSpawnPoints[lane].position, laneHitZones[lane].position);
+                float spawnAtSec = note.timeMs / 1000f - dist / note.speed;
 
                 if (songTimeSec >= spawnAtSec)
                 {
@@ -107,14 +93,9 @@ namespace Karaoke.Tap
 
         private void SpawnBlob(NoteData note, int lane, float songTimeSec)
         {
-            if (_pools[lane].Count == 0)
-            {
-                Debug.LogWarning($"[NoteSpawner] Pool empty for lane {lane}.");
-                return;
-            }
+            if (_pools[lane].Count == 0) { Debug.LogWarning($"[NoteSpawner] Pool empty lane {lane}."); return; }
 
-            float dist = Vector3.Distance(laneSpawnPoints[lane].position, laneHitZones[lane].position);
-            float travelSec = dist / note.speed;
+            float dist       = Vector3.Distance(laneSpawnPoints[lane].position, laneHitZones[lane].position);
             float arrivalTime = Time.time + (note.timeMs / 1000f - songTimeSec);
 
             var blob = _pools[lane].Dequeue();
@@ -124,23 +105,21 @@ namespace Karaoke.Tap
             _active.Add(blob);
         }
 
-        // Вызывается BlobNote при успешном тапе
-        private void OnNoteHit(AudioClip clip)
-        {
-            accompanimentPlayer?.PlayClip(clip);
-        }
-
-        public void ReturnToPool(BlobNote blob)
-        {
-            int lane = Mathf.Clamp(blob.NoteData.lane, 0, _pools.Length - 1);
-            _active.Remove(blob);
-            blob.gameObject.SetActive(false);
-            _pools[lane].Enqueue(blob);
-        }
+        private void OnNoteHit(AudioClip clip, float pitch, float durationSec, float fadeSec)
+            => accompanimentPlayer?.PlayNote(clip, pitch, durationSec, fadeSec);
 
         public List<BlobNote> GetActiveBlobs() => _active;
-    
 
-private void ReturnAllToPool() { for (int i = _active.Count - 1; i >= 0; i--) { var blob = _active[i]; int lane = Mathf.Clamp(blob.NoteData.lane, 0, _pools.Length - 1); blob.gameObject.SetActive(false); _pools[lane].Enqueue(blob); } _active.Clear(); }
-}
+        private void ReturnAllToPool()
+        {
+            for (int i = _active.Count - 1; i >= 0; i--)
+            {
+                var blob = _active[i];
+                int lane = Mathf.Clamp(blob.NoteData.lane, 0, _pools.Length - 1);
+                blob.gameObject.SetActive(false);
+                _pools[lane].Enqueue(blob);
+            }
+            _active.Clear();
+        }
+    }
 }

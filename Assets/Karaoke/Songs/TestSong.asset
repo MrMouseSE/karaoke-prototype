@@ -17,18 +17,255 @@ MonoBehaviour:
   artist: "\u0412. \u0428\u0430\u0438\u043D\u0441\u043A\u0438\u0439"
   bpm: 100
   notes:
-  - timeMs: 1300
+  - timeMs: 200
+    lane: 3
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 844822ae4edbaae479cb45612818ba0e, type: 3}
+    baseMidiNote: 47
+    midiNote: 47
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 500
+    lane: 3
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: b417707491cd77447992c42872162012, type: 3}
+    baseMidiNote: 45
+    midiNote: 45
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 800
+    lane: 3
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 1a0ad8ad665104b4d89a047abb7d2f4d, type: 3}
+    baseMidiNote: 43
+    midiNote: 43
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 1100
+    lane: 3
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: fccf0c60734f24b4cb2e35762bd7e784, type: 3}
+    baseMidiNote: 41
+    midiNote: 41
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 1400
+    lane: 3
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: e4ef5c7e08f03374e8a7cee4f6a0c4be, type: 3}
+    baseMidiNote: 40
+    midiNote: 40
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 1700
+    lane: 3
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 4132d01ab2d86064caa6ad6fca26b7b9, type: 3}
+    baseMidiNote: 38
+    midiNote: 38
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 2000
+    lane: 3
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 063db2403aa84ff4d8bf1bec788b0ea5, type: 3}
+    baseMidiNote: 36
+    midiNote: 36
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 2300
     lane: 2
     speed: 5
     tapWindowMs: 350
-    clip: {fileID: 8300000, guid: 3e47570d849f7014ea6e3d1a6a7691bd, type: 3}
-  - timeMs: 700
+    baseClip: {fileID: 8300000, guid: 844822ae4edbaae479cb45612818ba0e, type: 3}
+    baseMidiNote: 47
+    midiNote: 59
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 2600
     lane: 2
     speed: 5
     tapWindowMs: 350
-    clip: {fileID: 8300000, guid: 3e47570d849f7014ea6e3d1a6a7691bd, type: 3}
-  - timeMs: 1000
+    baseClip: {fileID: 8300000, guid: b417707491cd77447992c42872162012, type: 3}
+    baseMidiNote: 45
+    midiNote: 57
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 2900
+    lane: 2
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 1a0ad8ad665104b4d89a047abb7d2f4d, type: 3}
+    baseMidiNote: 43
+    midiNote: 55
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 3200
+    lane: 2
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: fccf0c60734f24b4cb2e35762bd7e784, type: 3}
+    baseMidiNote: 41
+    midiNote: 53
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 3500
+    lane: 2
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: e4ef5c7e08f03374e8a7cee4f6a0c4be, type: 3}
+    baseMidiNote: 40
+    midiNote: 52
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 3800
+    lane: 2
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 4132d01ab2d86064caa6ad6fca26b7b9, type: 3}
+    baseMidiNote: 38
+    midiNote: 50
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 4100
+    lane: 2
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 063db2403aa84ff4d8bf1bec788b0ea5, type: 3}
+    baseMidiNote: 36
+    midiNote: 48
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 4400
+    lane: 1
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 844822ae4edbaae479cb45612818ba0e, type: 3}
+    baseMidiNote: 47
+    midiNote: 71
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 4700
+    lane: 1
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: b417707491cd77447992c42872162012, type: 3}
+    baseMidiNote: 45
+    midiNote: 69
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 5000
+    lane: 1
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 1a0ad8ad665104b4d89a047abb7d2f4d, type: 3}
+    baseMidiNote: 43
+    midiNote: 67
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 5300
+    lane: 1
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: fccf0c60734f24b4cb2e35762bd7e784, type: 3}
+    baseMidiNote: 41
+    midiNote: 65
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 5600
+    lane: 1
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: e4ef5c7e08f03374e8a7cee4f6a0c4be, type: 3}
+    baseMidiNote: 40
+    midiNote: 64
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 5900
+    lane: 1
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 4132d01ab2d86064caa6ad6fca26b7b9, type: 3}
+    baseMidiNote: 38
+    midiNote: 62
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 6200
+    lane: 1
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 063db2403aa84ff4d8bf1bec788b0ea5, type: 3}
+    baseMidiNote: 36
+    midiNote: 60
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 6500
     lane: 0
     speed: 5
     tapWindowMs: 350
-    clip: {fileID: 8300000, guid: 70b8268dd2f44524dbcca2acdfaf641d, type: 3}
+    baseClip: {fileID: 8300000, guid: 844822ae4edbaae479cb45612818ba0e, type: 3}
+    baseMidiNote: 47
+    midiNote: 83
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 6800
+    lane: 0
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: b417707491cd77447992c42872162012, type: 3}
+    baseMidiNote: 45
+    midiNote: 81
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 7100
+    lane: 0
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 1a0ad8ad665104b4d89a047abb7d2f4d, type: 3}
+    baseMidiNote: 43
+    midiNote: 79
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 7400
+    lane: 0
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: fccf0c60734f24b4cb2e35762bd7e784, type: 3}
+    baseMidiNote: 41
+    midiNote: 77
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 7700
+    lane: 0
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: e4ef5c7e08f03374e8a7cee4f6a0c4be, type: 3}
+    baseMidiNote: 40
+    midiNote: 76
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 8000
+    lane: 0
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 4132d01ab2d86064caa6ad6fca26b7b9, type: 3}
+    baseMidiNote: 38
+    midiNote: 74
+    noteDurationSec: 0.4
+    fadeSec: 0.15
+  - timeMs: 8300
+    lane: 0
+    speed: 5
+    tapWindowMs: 350
+    baseClip: {fileID: 8300000, guid: 063db2403aa84ff4d8bf1bec788b0ea5, type: 3}
+    baseMidiNote: 36
+    midiNote: 72
+    noteDurationSec: 0.4
+    fadeSec: 0.15
